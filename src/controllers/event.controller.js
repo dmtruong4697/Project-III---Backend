@@ -1,9 +1,35 @@
 import EventModel from "../models/Event.js";
+// import multer from "multer";
+//import { bucket } from "../config/firebase.js";
+import { storage } from "../config/firebase.js";
+import { getDownloadURL, uploadBytes } from "firebase/storage";
+
+const uploadImage = async (req, res) => {
+  try {
+    if (!req.image) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const storageRef = ref(storage, 'some-child');
+
+    await uploadBytes(storageRef, req.image.buffer).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        console.log('File available at', downloadURL);
+        res.status(200).json({ imageUrl: downloadURL });
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while uploading' });
+  }
+};
 
 const createEvent = async(req, res) => {
     try {
         const { name, description, imageUrl, tags, ticketOpeningTime, ticketClosingTime, startTime, closeTime, location, tickets, roomIds } = req.body;
         const publisherId = req.id; 
+
+        // const imageBuffer = Buffer.from(imageUrl, 'base64');
 
         const newEvent = new EventModel({
             name,
@@ -159,4 +185,5 @@ const getAllEvent = async (req, res) => {
     publisherGetEventDetail,
     publisherUpdateEvent,
     publisherDeleteEvent,
+    uploadImage,
   };

@@ -1,6 +1,6 @@
 import  express from 'express';
 import {connectDB} from './src/config/db.js';
-import testRouter from './src/routes/test.route.js';
+// import testRouter from './src/routes/test.route.js';
 import authRouter from './src/routes/auth.route.js';
 import userRouter from './src/routes/user.route.js';
 import publisherRouter from './src/routes/publisher.route.js';
@@ -11,6 +11,8 @@ import swaggerUi from 'swagger-ui-express';
 
 import cors from 'cors';
 import ticketRouter from './src/routes/ticket.route.js';
+import multer from 'multer';
+
 const app = express();
 
 app.get('/', (req, res) => {
@@ -21,7 +23,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", testRouter);
+const upload = multer({
+    storage: multer.memoryStorage()
+})
+app.use(upload.single())
+
+// app.use("/api", testRouter);
 app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", publisherRouter);
