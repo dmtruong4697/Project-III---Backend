@@ -11,7 +11,7 @@ eventRouter.use(express.json({ extended: false }))
 
 // eventRouter.post("/upload", upload.single('image'), uploadImage);
 eventRouter.post("/create-event",verifyToken, checkRole('PUBLISHER'), createEvent);
-eventRouter.get("/all-event-publisher",verifyToken, checkRole('PUBLISHER'), publisherGetAllEvent);
+eventRouter.post("/all-event-publisher",verifyToken, checkRole('PUBLISHER'), publisherGetAllEvent);
 eventRouter.get("/event-detail-publisher/:eventId",verifyToken, checkRole('PUBLISHER'), publisherGetEventDetail);
 eventRouter.post("/all-event", getAllEvent);
 eventRouter.get("/event-detail/:eventId", getEventDetail);
