@@ -12,6 +12,7 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import ticketRouter from './src/routes/ticket.route.js';
 import multer from 'multer';
+import testRouter from './src/routes/test.route.js';
 
 const app = express();
 
@@ -28,7 +29,7 @@ const upload = multer({
 })
 app.use(upload.single())
 
-// app.use("/api", testRouter);
+app.use("/api", testRouter);
 app.use("/api", authRouter);
 app.use("/api", userRouter);
 app.use("/api", publisherRouter);
